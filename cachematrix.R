@@ -1,15 +1,42 @@
-## Put comments here that give an overall description of what your
-## functions do
+#create a matrix and define mutator and accessor functions for that
+#matrix. If a previous
+#object of type makeCacheMatrix has had its inverse calculated and
+#stored in the cache, make
+#CacheMatrix clears the cache.
 
-## Write a short comment describing this function
-
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <-makeMatrix<-function(x=matrix()){
+  inv<-NULL
+  set<-function(y){
+    x<<-y
+    inv<<-NULL
+  }
+  get<-function() x
+  setInv<- function(inverse) inv<<-inverse
+  getInv<-function () inv
+  list (set=set, get=get,
+        setInv=setInv,
+        getInv=getInv)
 }
 
+#If there is no inverse value in cache, this function is supposed to
+#calculate the
+#inverse of thde inputed object of type makeCacheMatrix and store it
+#in the cache
+#, else it retrevies the previously computed inverse from the cache.
+#However, this function
+#fails to act as intented due to an " Error in as.vector(x, mode) :
+#cannot coerce type 'closure' to vector of type 'any'" this error
+#occurs when the function
+#attempts to calculate and inverse.
 
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve<-function(x, ...){
+  inv<-x$getInv()
+  if(!is.null(inv)){
+    message("getting cached data")
+    return(inv)
+  }
+  data<-x$get
+  inv<-solve(data, ...)
+  x$setInv(inv)
+  inv
 }
